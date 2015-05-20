@@ -55,8 +55,8 @@ echo "change kernel generator config"
 cp -rv etc/ltsp/* $CHROOT/etc/ltsp/
 ltsp-chroot --arch $ARCH /usr/share/ltsp/update-kernels
 
-if [ ! -f /etc/ltsp/ltsp-update-images.exclude.bak ]; then
+if [ ! -f /etc/ltsp/ltsp-update-images.excludes.bak ]; then
 echo "change update-image conf"
-cp /etc/ltsp/ltsp-update-image.exclude /etc/ltsp/update-image.exclude.bak
-cp etc/ltsp/ltsp-update-image.exclude /etc/ltsp/
+cp /etc/ltsp/ltsp-update-image.excludes /etc/ltsp/update-image.excludes.bak
+cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
 fi
