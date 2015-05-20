@@ -54,6 +54,9 @@ cp -rv xinitrc.d $CHROOT/usr/share/ltsp/
 cp -rv screen.d $CHROOT/usr/share/ltsp/
 
 echo "change kernel generator config"
+if [ ! -d $CHROOT/etc/ltsp ]; then
+	mkdir $CHROOT/etc/ltsp
+fi
 cp -rv etc/ltsp/* $CHROOT/etc/ltsp/
 ltsp-chroot --arch $ARCH /usr/share/ltsp/update-kernels
 
