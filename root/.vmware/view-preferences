@@ -1,0 +1,2 @@
+view.autoConnectBroker = "10.11.202.1"
+view.sslVerificationMode = "3"

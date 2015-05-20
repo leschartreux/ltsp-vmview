@@ -1,0 +1,6 @@
+# implement numlock handling if numlockx is installed
+# thanks to Leo Eraly and Gideon Romm
+
+if [ -n "${PULSEAUDIO_PACTL_CMD}" ] && [ -x /usr/bin/pactl ]; then
+	/usr/bin/pactl $PULSEAUDIO_PACTL_CMD
+fi

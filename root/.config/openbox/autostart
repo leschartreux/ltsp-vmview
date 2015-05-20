@@ -5,9 +5,12 @@
 #
 
 #launch vmware view from thinpro with USB support and better audio latency
+VMWARE_LIBDIR=/usr/lib/vmware/view/usb
+
+
 export VMWARE_DISABLE_PULSE_AUDIO_SUPPORT=1
-[ -x /usr/lib/vmware/vmware-usbarbitrator ] && /usr/lib/vmware/vmware-usbarbitrator
-[ -x /usr/lib/vmware/vmware-view-usbd ] && /usr/lib/vmware/vmware-view-usbd
+[ -x $VMWARE_LIBDIR/vmware-usbarbitrator ] && $VMWARE_LIBDIR/vmware-usbarbitrator
+[ -x $VMWARE_LIBDIR/vmware-view-usbd ] && $VMWARE_LIBDIR/vmware-view-usbd
 # If you want to use GNOME config tools...
 #
 #if test -x /usr/lib/openbox/gnome-settings-daemon >/dev/null; then
