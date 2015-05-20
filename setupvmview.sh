@@ -11,6 +11,7 @@ fi
 
 if [ ! -d $CHROOT ]; then
 	echo /opt/ltsp/$1 is not a valid path
+	echo Please first build default ltsp client with "ltsp-build-client --chroot i386-vmview"
 	exit 1;
 fi
 
@@ -33,7 +34,7 @@ else
 	echo "Continue"
 fi
 
-for i in libxss1 openssl x11vnc hsetroot
+for i in libxss1 openssl x11vnc hsetroot openbox
 do
 	echo install package $i
 	ltsp-chroot --arch $ARCH apt-get install $i
