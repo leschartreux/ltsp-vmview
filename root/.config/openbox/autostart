@@ -22,6 +22,20 @@ export VMWARE_DISABLE_PULSE_AUDIO_SUPPORT=1
 # If you want to use XFCE config tools...
 #
 #xfce-mcs-manager &
-hsetroot -fill /root/vmview.png
-x11vnc -rfbauth /root/.config/openbox/.vncpass -rfbport 23245  -forever -bg
+
+#add custom background
+if [ -f /root/vmview.jpg ]; then
+	hsetroot -fill /root/vmview.jpg
+fi
+
+if [ -n $VNC_LISTEN ]; then
+	if [ -z $VNC_PORT ]; then
+		VNC_PORT=59001
+	fi
+	if [ -f  /root/.config/openbox/.vncpass ]; then
+		x11vnc -rfbauth /root/.config/openbox/.vncpass -rfbport $VNC_PORT  -forever -bg
+	fi
+fi
+
+#finaly launch vmv view
 /root/vmview &

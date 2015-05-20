@@ -33,15 +33,16 @@ else
 	echo "Continue"
 fi
 
-for i in libxss1 openssl x11vnc
+for i in libxss1 openssl x11vnc hsetroot
 do
-	echo install dependency $i
+	echo install package $i
 	ltsp-chroot --arch $ARCH apt-get install $i
 done
 
 echo "link libraries"
 ltsp-chroot  --arch $ARCH ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/i386-linux-gnu/libssl.so.1.0.1
 ltsp-chroot  --arch $ARCH ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/i386-linux-gnu/libcrypto.so.1.0.1
+ltsp-chroot  --arch $ARCH ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/i386-linux-gnu/libudev.so.0
 
 
 echo "copy root profile"
