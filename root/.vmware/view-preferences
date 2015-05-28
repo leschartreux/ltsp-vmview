@@ -1,2 +1,2 @@
-view.autoConnectBroker = "10.11.202.1"
+view.autoConnectBroker = "VMVIEW_BROKER_IP"
 view.sslVerificationMode = "3"
