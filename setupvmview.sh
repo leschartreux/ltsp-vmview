@@ -6,7 +6,7 @@ ARCH=i386
 CHROOT="/opt/ltsp/$DIR"
 
 if [ -z $DIR ]; then
-	echo please specify a depot directory (ex: ./setupvmview.sh i386-vmview)
+	echo "Please specify a depot directory (ex: ./setupvmview.sh i386-vmview)"
 	exit 1;
 fi
 
