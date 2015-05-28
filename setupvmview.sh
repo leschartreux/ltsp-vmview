@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #Setup script to configure vmware-view client in ltsp-chroot
-ARCH=$1
-CHROOT="/opt/ltsp/$ARCH"
+DIR=$1
+ARCH=i386
+CHROOT="/opt/ltsp/$DIR"
 
 if [ -z $ARCH ]; then
 	echo usage : ./setupvmview.sh ltsparch_path
@@ -10,8 +11,8 @@ if [ -z $ARCH ]; then
 fi
 
 if [ ! -d $CHROOT ]; then
-	echo /opt/ltsp/$1 is not a valid path
-	echo Please first build default ltsp client with "ltsp-build-client --chroot i386-vmview"
+	echo /opt/ltsp/$DIR is not a valid path
+	echo Please first build default ltsp client with "ltsp-build-client --chroot $DIR --arch $ARCH --dist precise"
 	exit 1;
 fi
 
@@ -28,22 +29,23 @@ if [ ! -f  $CHROOT/root/$CLIENT_BUNDLE ]; then
 	echo "Found $CLIENT_BUNDLE try to install it"
 	cp $CLIENT_BUNDLE $CHROOT/root/
 	chmod a+x $CHROOT/root/$CLIENT_BUNDLE
-	ltsp-chroot --arch $ARCH  /root/$CLIENT_BUNDLE
+	ltsp-chroot --arch $DIR  /root/$CLIENT_BUNDLE
 else
 	echo "$CLIENT_BUNDLE already present in chroot"
 	echo "Continue"
 fi
 
+#REquired packages for vmware-view
 for i in libxss1 openssl x11vnc hsetroot openbox
 do
 	echo install package $i
-	ltsp-chroot --arch $ARCH apt-get install $i
+	ltsp-chroot --arch $DIR apt-get install $i
 done
 
 echo "link libraries"
-ltsp-chroot  --arch $ARCH ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/i386-linux-gnu/libssl.so.1.0.1
-ltsp-chroot  --arch $ARCH ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/i386-linux-gnu/libcrypto.so.1.0.1
-ltsp-chroot  --arch $ARCH ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/i386-linux-gnu/libudev.so.0
+ltsp-chroot  --arch $DIR ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/$ARCH-linux-gnu/libssl.so.1.0.1
+ltsp-chroot  --arch $DIR ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/$ARCH-linux-gnu/libcrypto.so.1.0.1
+ltsp-chroot  --arch $DIR ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
 
 
 echo "copy root profile"
@@ -57,11 +59,14 @@ echo "change kernel generator config"
 if [ ! -d $CHROOT/etc/ltsp ]; then
 	mkdir $CHROOT/etc/ltsp
 fi
-cp -rv etc/ltsp/* $CHROOT/etc/ltsp/
-ltsp-chroot --arch $ARCH /usr/share/ltsp/update-kernels
+if [ -f etc/ltsp/ltsp-update-kernel.conf ]; then
+	cp etc/ltsp/ltsp-update-kernel.conf $CHROOT/etc/ltsp/
+	ltsp-chroot --arch $DIR /usr/share/ltsp/update-kernels
+fi
 
-if [ ! -f /etc/ltsp/ltsp-update-images.excludes.bak ]; then
-echo "change update-image conf"
-cp /etc/ltsp/ltsp-update-image.excludes /etc/ltsp/update-image.excludes.bak
-cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
+#Needed to include root home dir into squashfs image (unbuntu Trusty)
+if [ -f /etc/ltsp/ltsp-update-images.excludes ]; then
+	echo "change update-image exlcudes"
+	cp /etc/ltsp/ltsp-update-image.excludes /etc/ltsp/update-image.excludes.bak
+	cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
 fi
