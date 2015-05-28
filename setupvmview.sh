@@ -5,7 +5,7 @@ DIR=$1
 ARCH=i386
 CHROOT="/opt/ltsp/$DIR"
 
-if [ -z $ARCH ]; then
+if [ -z $DIR ]; then
 	echo usage : ./setupvmview.sh ltsparch_path
 	exit 1;
 fi
