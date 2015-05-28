@@ -71,20 +71,23 @@ if [ -f /etc/ltsp/ltsp-update-images.excludes ]; then
 	cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
 fi
 
-if [-f lts.conf ]; then
+if [ -f lts.conf ]; then
 	echo "copy lts.conf file in TFTP root"
 	cp lts.conf /var/lib/tftpboot/ltsp/$dir/lts.conf
 fi
 
 echo "**************************"
-echo "ALL DONE !"
+echo "SETUP FINISHED !"
 echo "**************************"
-echo "You need to rebuild your squashfs image with"
-echo "	ltsp-update-image --arch $DIR"
+echo "things to be done : "
+echo "	1) edit view.autoconnectBroker in $CHROOT/root/.vmware/view-preferences"
 echo ""
-echo "Configure some thin client in your dhcpd.conf (isc-dhcp-server) by adding those parameters : "
-echo '	next-server ltsp_server_ip;'
-echo "	filename \"ltsp/$DIR/pxelinux.0\";"
-echo "	option root-path=\"$CHROOT\";"
+echo " 2) rebuild your squashfs image with"
+echo "		ltsp-update-image --arch $DIR"
+echo ""
+echo "	3) Configure some thin client in your dhcpd.conf (isc-dhcp-server) by adding those parameters : "
+echo '		next-server ltsp_server_ip;'
+echo "		filename \"ltsp/$DIR/pxelinux.0\";"
+echo "		option root-path \"$CHROOT\";"
 echo
 echo Enjoy !
