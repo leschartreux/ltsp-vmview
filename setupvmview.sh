@@ -36,10 +36,10 @@ else
 fi
 
 #REquired packages for vmware-view
-for i in libxss1 openssl x11vnc hsetroot openbox
+for i in libxss1 openssl openssh-server x11vnc hsetroot openbox
 do
 	echo install package $i
-	ltsp-chroot --arch $DIR apt-get install $i
+	ltsp-chroot --arch $DIR apt-get install $i --yes
 done
 
 echo "link libraries"
@@ -71,9 +71,9 @@ if [ -f /etc/ltsp/ltsp-update-images.excludes ]; then
 	cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
 fi
 
-if [ -f lts.conf ]; then
+if [ ! -f /var/lib/tftpboot/ltsp/$DIR/lts.conf ]; then
 	echo "copy lts.conf file in TFTP root"
-	cp lts.conf /var/lib/tftpboot/ltsp/$dir/lts.conf
+	cp lts.conf /var/lib/tftpboot/ltsp/$DIR/lts.conf
 fi
 
 echo "**************************"
