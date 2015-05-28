@@ -70,3 +70,21 @@ if [ -f /etc/ltsp/ltsp-update-images.excludes ]; then
 	cp /etc/ltsp/ltsp-update-image.excludes /etc/ltsp/update-image.excludes.bak
 	cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
 fi
+
+if [-f lts.conf ]; then
+	echo "copy lts.conf file in TFTP root"
+	cp lts.conf /var/lib/tftpboot/ltsp/$dir/lts.conf
+fi
+
+echo "**************************"
+echo "ALL DONE !"
+echo "**************************"
+echo "You need to rebuild your squashfs image with"
+echo "	ltsp-update-image --arch $DIR"
+echo ""
+echo "Configure some thin client in your dhcpd.conf (isc-dhcp-server) by adding those parameters : "
+echo '	next-server ltsp_server_ip;'
+echo "	filename \"ltsp/$DIR/pxelinux.0\";"
+echo "	option root-path=\"$CHROOT\";"
+echo
+echo Enjoy !
