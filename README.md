@@ -1,37 +1,92 @@
 # ltsp-vmview
+ltsp-vmview is a shell script to build Linux Diskless Thin Client for *Vmware Horizon View*.
 
-    Do you agree? [yes/no]: yes
-    
-    Would you like to install USB Redirection?(The USB component enables
-    USB device redirection from your local computer to the remote
-    desktop.) [yes]:
+Recent releases of *Vmware Horizon View Client* for Linux are now *full feartured*. This make a good choice to access *Vmware View Brokers* from Linux Desktops.
 
-    Would you like to install Smart Card?(The Smart Card component enables
-    Smart Card device redirection from your local computer to the remote
-    desktop.) [yes]: no
+LTSP (Linux Terminal Server Project) is the best Diskless Thin Client solution. Originally designed for remote Linux desktops sessions, but fully customizable.
+  More info on http://ltsp.org.
 
-    Would you like to install Real-Time Audio-Video?(The Real-Time Audio-
-    Video component allows you to use local computer's webcam or
-    microphone on the remote desktop.) [yes]:
+## Features
+IT permits full access to virtual desktop pools available via the brokers.
+* *PCoIP* support
+* USB redirection
+* Audio-Video support
 
-    Would you like to install Virtual Printing?(The Virtual Printing
-    component allows you to use local or network printers from a remote
-    desktop without requiring that additional print drivers be installed
+## Requirements
+
+- A small PC with network, or free space to install as Virtual MAchine.
+64 or 32 bit processor. Multi core is better to speed up images building.
+6GB free space on Hard drive is enough.
+
+- *Ubuntu server* Setup CD. *Ubuntu 14.04* iso from here http://www.ubuntu.com/download/server.
+
+
+## Quick Setup
+- Perform a minimum install of *Ubuntu Server* Without additional packages.
+
+- login as admin account and set a password for root to avoid many ```sudo```.
+
+```
+sudo su
+passwd
+```
+
+- Install *ltsp-server* package as usally.
+
+```
+apt-get install ltsp-server
+```
+
+- Install git then clone ltsp-vmview project from github
+```
+apt-get install git
+mkdir git
+git clone https://github.com/leschartreux/ltsp-vmview.git
+```
+
+- go to http://www.vmware.com/go/viewclients and download last release of *View Client* for Linux. This is a *.bundle* file. Put it in project's root.
+
+- choose a name for your thin client directory (ex : *ltsp-vmview*) and build a default thin client.
+```
+ltsp-build-client --arch i386 --chroot ltsp-vmview --dist precise
+```
+In my case Precise (12.04) release from Ubuntu, has better pulseaudio (sound server) as it consumes less CPU. Always choose 32bits architecture for best compatibility with thin PC hardware. Process is quite long depends on Internet bandwidth. But full client root is less than 1GB.
+
+- Once default ltsp client has built, cd to root's project then launch
+setup script to configure the client.
+```
+./setupvmview.sh
+```
+
+- Just follow Instructions. It will install View Client in thin client chroot. You will have to agree Vmware's licenses then answer questions. In order **yes**, **no**,**yes**,**no**. Last question must be **no** as it can't verify correct setup. Here's the output :
+
+```
+Do you agree? [yes/no]: yes
+
+Would you like to install USB Redirection?(The USB component enables USB device redirection from your local computer to the remote desktop.) [yes]:
+
+Would you like to install Smart Card?(The Smart Card component enables Smart Card device redirection from your local computer to the remote desktop.) [yes]: no
+
+Would you like to install Real-Time Audio-Video?(The Real-Time Audio-Video component allows you to use local computer's webcam or microphone on the remote desktop.) [yes]:
+
+Would you like to install Virtual Printing?(The Virtual Printing component allows you to use local or network printers from a remote desktop without requiring that additional print drivers be installed
     in the remote desktop.) [yes]: no
 
-    The product is ready to be installed:
-            USB Redirection
-            PCoIP
-            Real-Time Audio-Video
-            View Client
-    Press Enter to begin installation or Ctrl-C to cancel.
-    
-    Installing VMware Horizon Client 3.2.0
-    Configuring...
-    [######################################################################] 100%
-    Installation was successful.
-    Do you want to check your system compatibilities for Horizon Client,
-    this Scan will NOT collect any of your data?[yes/no]: no
-    
-    
+The product is ready to be installed:
+ USB Redirection
+ PCoIP
+ Real-Time Audio-Video
+ View Client
+Press Enter to begin installation or Ctrl-C to cancel.
 
+Installing VMware Horizon Client 3.2.0
+Configuring...
+[######################################################################] 100%
+Installation was successful.
+Do you want to check your system compatibilities for Horizon Client,
+this Scan will NOT collect any of your data?[yes/no]: no
+```
+
+- Then script will install missings librairies and other stuffs in thin client.
+
+- Last, just follow Instructions at end of script to complete setup.
