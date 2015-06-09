@@ -12,7 +12,7 @@ fi
 
 if [ ! -d $CHROOT ]; then
 	echo /opt/ltsp/$DIR is not a valid path
-	echo Please first build default ltsp client with "ltsp-build-client --chroot $DIR --arch $ARCH --dist precise"
+	echo Please first build default ltsp client with "ltsp-build-client --chroot $DIR --arch $ARCH [--dist precise]"
 	exit 1;
 fi
 
@@ -55,7 +55,7 @@ echo "copy ltsp scripts"
 cp -rv xinitrc.d $CHROOT/usr/share/ltsp/
 cp -rv screen.d $CHROOT/usr/share/ltsp/
 
-echo "change kernel generator config"
+echo "Change kernel generator config"
 if [ ! -d $CHROOT/etc/ltsp ]; then
 	mkdir $CHROOT/etc/ltsp
 fi
@@ -66,9 +66,11 @@ fi
 
 #Needed to include root home dir into squashfs image (unbuntu Trusty)
 if [ -f /etc/ltsp/ltsp-update-images.excludes ]; then
-	echo "change update-image exlcudes"
-	cp /etc/ltsp/ltsp-update-image.excludes /etc/ltsp/update-image.excludes.bak
-	cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
+	echo "Change update-image exlcudes"
+	if [ ! -f /etc/ltsp/update-image.excludes.bak ]; then
+		cp /etc/ltsp/ltsp-update-image.excludes /etc/ltsp/update-image.excludes.bak
+		cp etc/ltsp/ltsp-update-image.excludes /etc/ltsp/
+	fi
 fi
 
 if [ ! -f /var/lib/tftpboot/ltsp/$DIR/lts.conf ]; then
@@ -81,6 +83,9 @@ echo "SETUP FINISHED !"
 echo "**************************"
 echo "things to be done : "
 echo "	1) edit view.autoconnectBroker in $CHROOT/root/.vmware/view-preferences"
+echo ""
+echo "	2) optionally add a VNC password to access screen remotly :"
+echo "ltsp-chroot --arch $ARCH x11vnc -storepasswd /root/.config/openbox/.vncpass"
 echo ""
 echo "	2) rebuild your squashfs image with"
 echo "		ltsp-update-image --arch $DIR"
