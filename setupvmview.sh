@@ -59,8 +59,8 @@ echo "Change kernel generator config"
 if [ ! -d $CHROOT/etc/ltsp ]; then
 	mkdir $CHROOT/etc/ltsp
 fi
-if [ -f etc/ltsp/ltsp-update-kernel.conf ]; then
-	cp etc/ltsp/ltsp-update-kernel.conf $CHROOT/etc/ltsp/
+if [ -f etc/ltsp/update-kernel.conf ]; then
+	cp etc/ltsp/update-kernel.conf $CHROOT/etc/ltsp/
 	ltsp-chroot --arch $DIR /usr/share/ltsp/update-kernels
 fi
 
@@ -91,7 +91,7 @@ echo "	3) optionally create root password for console or SSH access:"
 echo "ltsp-chroot --arch $DIR passwd"
 echo ""
 echo "	4) rebuild your squashfs image with"
-echo "ltsp-update-image $DIR"
+echo "ltsp-update-image --arch $DIR"
 echo ""
 echo "	5) edit Broker IP in /var/lib/tftpboot/ltsp/$dir/lts.conf"
 echo 
