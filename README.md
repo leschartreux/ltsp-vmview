@@ -7,14 +7,17 @@ LTSP (Linux Terminal Server Project) is the best Diskless Thin Client solution. 
   More info on http://ltsp.org.
 
 ## Features
-IT permits full access to virtual desktop pools available via the brokers.
+Allow full access to virtual desktop pools available via the brokers.
+Launches a tiny *openbox* window manager with right click menu to launch xterm (for test and debug) or view client.
+view client starts automatically and connects to configured default View broker.
+
 * *PCoIP* support
 * USB redirection
 * Audio-Video support
 
 ## Requirements
 
-- A small PC with network, or free space to install as Virtual MAchine.
+- A small PC with network, or free space to install as Virtual Machine.
 64 or 32 bit processor. Multi core is better to speed up images building.
 6GB free space on Hard drive is enough.
 
@@ -50,7 +53,7 @@ git clone https://github.com/leschartreux/ltsp-vmview.git
 ```
 ltsp-build-client --arch i386 --chroot ltsp-vmview --dist precise
 ```
-In my case Precise (12.04) release from Ubuntu, has better pulseaudio (sound server) as it consumes less CPU. Always choose 32bits architecture for best compatibility with thin PC hardware. Process is quite long depends on Internet bandwidth. But full client root is less than 1GB.
+In my case Precise (12.04) release from Ubuntu, has better pulseaudio (sound server) as it consumes less CPU. 32bits architecture is mandatory as View Clien binaries are 32bits, and for better compatibility with thin PC hardware. Process is quite long depends on Internet bandwidth. But full client root is less than 1GB.
 
 - Once default ltsp client has built, cd to root's project then launch
 setup script to configure the client.
