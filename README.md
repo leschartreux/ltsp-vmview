@@ -17,11 +17,15 @@ view client starts automatically and connects to configured default View broker.
 
 ## Requirements
 
-- A small PC with network, or free space to install as Virtual Machine.
+- A small PC as server with network, or free space to install as Virtual Machine.
 64 or 32 bit processor. Multi core is better to speed up images building.
 6GB free space on Hard drive is enough.
 
-- *Ubuntu server* Setup CD. *Ubuntu 14.04* iso from here http://www.ubuntu.com/download/server.
+- *Ubuntu server* Setup CD. *Ubuntu 14.04* iso from here http://www.ubuntu.com/download/server. Or an existing Ubuntu LTS installation.
+
+- Any configurable DHCP server. *isc-dhcp-server* is a good one.
+
+- Some old (or new) PCs with boot on LAN capabilities. It works as Live CD so already installed systems are not affected.
 
 
 ## Quick Setup
