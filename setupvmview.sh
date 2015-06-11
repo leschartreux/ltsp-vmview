@@ -29,7 +29,12 @@ if [ ! -f  $CHROOT/root/$CLIENT_BUNDLE ]; then
 	echo "Found $CLIENT_BUNDLE try to install it"
 	cp $CLIENT_BUNDLE $CHROOT/root/
 	chmod a+x $CHROOT/root/$CLIENT_BUNDLE
-	ltsp-chroot --arch $DIR  /root/$CLIENT_BUNDLE
+	ltsp-chroot --arch $DIR  /root/$CLIENT_BUNDLE --eulas-agreed \
+	    --set-setting vmware-horizon-usb usbEnable yes \
+	    --set-setting vmware-horizon-virtual-printing tpEnable no \
+	    --set-setting vmware-horizon-smartcard smartcardEnable no \
+	    --set-setting vmware-horizon-rtav rtavEnable yes
+	      
 else
 	echo "$CLIENT_BUNDLE already present in chroot"
 	echo "Continue"
