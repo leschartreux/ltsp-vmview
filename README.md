@@ -94,6 +94,8 @@ Do you want to check your system compatibilities for Horizon Client,
 this Scan will NOT collect any of your data?[yes/no]: no
 ```
 
+**With 3.4 version of client and above**, Installer asks about USB install as service. Just answer no as it is in autostart.
+
 - Then script will install missings librairies and other stuffs in thin client.
 
 - Last, just follow Instructions at end of script to complete setup.
