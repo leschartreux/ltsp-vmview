@@ -3,20 +3,9 @@
 #Setup script to configure vmware-view client in ltsp-chroot
 DIR=$1
 ARCH=i386
-CHROOT="/opt/ltsp/$DIR"
+CHROOT="/"
 VMVIEW_PATH="/usr/lib/vmware/view/"
 TFTPDIR="/srv/tftp"
-
-if [ -z $DIR ]; then
-	echo "Please specify a depot directory (ex: ./setupvmview.sh i386-vmview)"
-	exit 1;
-fi
-
-if [ ! -d $CHROOT ]; then
-	echo /opt/ltsp/$DIR is not a valid path
-	echo Please first build default ltsp client with "ltsp-build-client --chroot $DIR --arch $ARCH [--dist precise]"
-	exit 1;
-fi
 
 CLIENT_BUNDLE=`ls VMware-Horizon-Client*.bundle 2> /dev/null`
 
@@ -31,7 +20,7 @@ if [ ! -f  $CHROOT/root/$CLIENT_BUNDLE ]; then
 	echo "Found $CLIENT_BUNDLE try to install it"
 	cp $CLIENT_BUNDLE $CHROOT/root/
 	chmod a+x $CHROOT/root/$CLIENT_BUNDLE
-	ltsp-chroot --arch $DIR  /root/$CLIENT_BUNDLE --console --eulas-agreed \
+	/root/$CLIENT_BUNDLE --console --eulas-agreed \
 	    --stop-service \
 	    --set-setting vmware-horizon-usb usbEnable yes \
 	    --set-setting vmware-horizon-virtual-printing tpEnable no \
@@ -48,18 +37,18 @@ fi
 for i in libxss1 openssl openssh-server x11vnc hsetroot openbox
 do
 	echo install package $i
-	ltsp-chroot --arch $DIR apt-get install $i --yes
+	apt-get install $i --yes
 done
 
 echo "link libraries"
 if [ ! -f "$CHROOT/$VMVIEW_PATH/libssl.so.1" ]; then
-	ltsp-chroot  --arch $DIR ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/$ARCH-linux-gnu/libssl.so.1.0.1
+	ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/$ARCH-linux-gnu/libssl.so.1.0.1
 fi
 if [ ! -f "$CHROOT/$VMVIEW_PATH/libcrypto.so.1.0.1" ]; then
-	ltsp-chroot  --arch $DIR ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/$ARCH-linux-gnu/libcrypto.so.1.0.1
+	ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/$ARCH-linux-gnu/libcrypto.so.1.0.1
 fi
 if [ ! -f "$CHROOT/$VMVIEW_PATH/libudev.so.0" ]; then
-	ltsp-chroot  --arch $DIR ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
+	ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
 fi
 
 
@@ -70,14 +59,15 @@ echo "copy ltsp scripts"
 cp -rv xinitrc.d $CHROOT/usr/share/ltsp/
 cp -rv screen.d $CHROOT/usr/share/ltsp/
 
-echo "Change kernel generator config"
-if [ ! -d $CHROOT/etc/ltsp ]; then
-	mkdir $CHROOT/etc/ltsp
-fi
-if [ -f etc/ltsp/update-kernel.conf ]; then
-	cp etc/ltsp/update-kernel.conf $CHROOT/etc/ltsp/
-	ltsp-chroot --arch $DIR /usr/share/ltsp/update-kernels
-fi
+
+#echo "Change kernel generator config"
+#if [ ! -d $CHROOT/etc/ltsp ]; then
+#	mkdir $CHROOT/etc/ltsp
+#fi
+#if [ -f etc/ltsp/update-kernel.conf ]; then
+#	cp etc/ltsp/update-kernel.conf $CHROOT/etc/ltsp/
+#	ltsp-chroot --arch $DIR /usr/share/ltsp/update-kernels
+#fi
 
 #Needed to include root home dir into squashfs image (unbuntu)
 if [ -f /etc/ltsp/ltsp-update-image.excludes ]; then
