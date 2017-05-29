@@ -1,59 +1,69 @@
 #!/bin/bash
 
-#Setup script to configure vmware-view client in ltsp-chroot
+#Setup script to configure vmware-horizon-view dedicated client 
+#version for Ubuntu PNP and FAT_CLIENT
+# see https://help.ubuntu.com/community/UbuntuLTSP/ltsp-pnp
+
+
 DIR=$1
 ARCH=i386
 CHROOT="/"
 VMVIEW_PATH="/usr/lib/vmware/view/"
-TFTPDIR="/srv/tftp"
+TFTPDIR="/var/lib/tftpboot"
+SETUP_ARGS_FILE="vhc-setup-args.conf"
 
 CLIENT_BUNDLE=`ls VMware-Horizon-Client*.bundle 2> /dev/null`
 
+#Check if C
 if [ -z $CLIENT_BUNDLE ]; then
 	echo "VMware-Horizon-Client bundle file not Found";
 	echo "please visit http://www.vmware.com/go/viewclients and download last release for Linux";
 	exit 1;
 fi
 
-
-if [ ! -f  $CHROOT/root/$CLIENT_BUNDLE ]; then
+if [ ! -f  $VMVIEW_PATH ]; then
 	echo "Found $CLIENT_BUNDLE try to install it"
 	cp $CLIENT_BUNDLE $CHROOT/root/
 	chmod a+x $CHROOT/root/$CLIENT_BUNDLE
-	/root/$CLIENT_BUNDLE --console --eulas-agreed \
-	    --stop-service \
-	    --set-setting vmware-horizon-usb usbEnable yes \
-	    --set-setting vmware-horizon-virtual-printing tpEnable no \
-	    --set-setting vmware-horizon-smartcard smartcardEnable no \
-	    --set-setting vmware-horizon-rtav rtavEnable yes \
-	    --set-setting vmware-horizon-tsdr tsdrEnable no
+	if [ ! -f $SETUP_ARTGS_FILE ]; then
+		echo "$SETUP_ARGS_FILE Not found. Can't install"
+	else
+		. $SETUP_ARTGS_FILE
+		/root/$CLIENT_BUNDLE $VMSETUP_ARGS
+	fi
 	      
 else
-	echo "$CLIENT_BUNDLE already present in chroot"
+	echo "$CLIENT_BUNDLE already present in /root"
 	echo "Continue"
 fi
 
 #REquired packages for vmware-view
-for i in libxss1 openssl openssh-server x11vnc hsetroot openbox
+for i in ltsp-server ltsp-client ldm libxss1 openssl openssh-server x11vnc hsetroot openbox
 do
 	echo install package $i
 	apt-get install $i --yes
 done
 
 echo "link libraries"
-if [ ! -f "$CHROOT/$VMVIEW_PATH/libssl.so.1" ]; then
-	ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/$ARCH-linux-gnu/libssl.so.1.0.1
-fi
-if [ ! -f "$CHROOT/$VMVIEW_PATH/libcrypto.so.1.0.1" ]; then
-	ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/$ARCH-linux-gnu/libcrypto.so.1.0.1
-fi
-if [ ! -f "$CHROOT/$VMVIEW_PATH/libudev.so.0" ]; then
-	ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
-fi
+#if [ ! -f "$CHROOT/$VMVIEW_PATH/libssl.so.1" ]; then
+#	ln -s /usr/lib/vmware/view/usb/libssl.so.1.0.1 /lib/$ARCH-linux-gnu/libssl.so.1.0.1
+#fi
+#if [ ! -f "$CHROOT/$VMVIEW_PATH/libcrypto.so.1.0.1" ]; then
+#	ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/$ARCH-linux-gnu/libcrypto.so.1.0.1
+#fi
+#if [ ! -f "$CHROOT/$VMVIEW_PATH/libudev.so.0" ]; then
+#	ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
+#fi
 
 
-echo "copy root profile"
-cp -rv root $CHROOT/
+echo "copy localuser profile"
+if [ ! -d /home/localuser ]; then
+	echo creating new user localuser
+	useradd -m localuser
+	echo "localuser:user" | chpasswd
+fi
+echo "copy localuser profile"
+cp -rv localuser $CHROOT/
 
 echo "copy ltsp scripts"
 cp -rv xinitrc.d $CHROOT/usr/share/ltsp/

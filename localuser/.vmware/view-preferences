@@ -1,0 +1,2 @@
+view.autoConnectBroker = "VMVIEW_BROKER_IP"
+view.sslVerificationMode = "3"
