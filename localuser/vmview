@@ -9,5 +9,5 @@ if [ "X$VMVIEW_OPTIONS" != "X" ]; then
 	ARGS="$ARGS $VMVIEW_OPTIONS"
 fi
 export USER=localuser
-#export VMWARE_DISABLE_PULSE_AUDIO_SUPPORT=1
+export VMWARE_DISABLE_PULSE_AUDIO_SUPPORT=1
 /usr/bin/vmware-view $ARGS

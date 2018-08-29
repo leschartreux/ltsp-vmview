@@ -8,7 +8,7 @@
 VMWARE_LIBDIR=/usr/lib/vmware/view/usb
 
 
-#export VMWARE_DISABLE_PULSE_AUDIO_SUPPORT=1
+export VMWARE_DISABLE_PULSE_AUDIO_SUPPORT=1
 [ -x $VMWARE_LIBDIR/vmware-usbarbitrator ] && $VMWARE_LIBDIR/vmware-usbarbitrator
 [ -x $VMWARE_LIBDIR/vmware-view-usbd ] && $VMWARE_LIBDIR/vmware-view-usbd
 # If you want to use GNOME config tools...
@@ -32,8 +32,8 @@ if [ -n $VNC_LISTEN ]; then
 	if [ -z $VNC_PORT ]; then
 		VNC_PORT=59001
 	fi
-	if [ -f  $HOME/.config/openbox/.vncpass ]; then
-		x11vnc -rfbauth $HOME/.config/openbox/.vncpass -rfbport $VNC_PORT  -forever -bg
+	if [ -f  /root/.config/openbox/.vncpass ]; then
+		x11vnc -rfbauth /root/.config/openbox/.vncpass -rfbport $VNC_PORT  -forever -bg
 	fi
 fi
 

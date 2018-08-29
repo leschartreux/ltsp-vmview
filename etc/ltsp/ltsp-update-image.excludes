@@ -4,8 +4,8 @@ etc/mysql/debian.cnf
 etc/NetworkManager/system-connections/*
 etc/ssh/ssh_host_*_key
 etc/udev/rules.d/??-persistent-*.rules
+home/*
 lost+found/*
-/root/*
 media/*
 mnt/*
 opt/ltsp*
