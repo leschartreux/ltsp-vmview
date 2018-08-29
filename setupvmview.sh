@@ -2,10 +2,15 @@
 
 #Setup script to configure vmware-view client in ltsp-chroot
 DIR=$1
-ARCH=i386
+if [ -z $2 ]; then
+	ARCH=amd64
+else
+	ARCH=$2
+fi
+
 CHROOT="/opt/ltsp/$DIR"
 VMVIEW_PATH="/usr/lib/vmware/view/"
-TFTPDIR="/srv/tftp"
+TFTPDIR="/var/lib/tftpboot"
 
 if [ -z $DIR ]; then
 	echo "Please specify a depot directory (ex: ./setupvmview.sh i386-vmview)"
@@ -14,7 +19,7 @@ fi
 
 if [ ! -d $CHROOT ]; then
 	echo /opt/ltsp/$DIR is not a valid path
-	echo Please first build default ltsp client with "ltsp-build-client --chroot $DIR --arch $ARCH [--dist precise]"
+	echo Please first build default ltsp client with "ltsp-build-client --chroot $DIR --arch $ARCH"
 	exit 1;
 fi
 
@@ -59,7 +64,7 @@ if [ ! -f "$CHROOT/$VMVIEW_PATH/libcrypto.so.1.0.1" ]; then
 	ltsp-chroot  --arch $DIR ln -s /usr/lib/vmware/view/usb/libcrypto.so.1.0.1 /lib/$ARCH-linux-gnu/libcrypto.so.1.0.1
 fi
 if [ ! -f "$CHROOT/$VMVIEW_PATH/libudev.so.0" ]; then
-	ltsp-chroot  --arch $DIR ln -s /lib/i386-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
+	ltsp-chroot  --arch $DIR ln -s /lib/$ARCH-linux-gnu/libudev.so.1 /lib/$ARCH-linux-gnu/libudev.so.0
 fi
 
 
