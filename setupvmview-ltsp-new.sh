@@ -10,7 +10,7 @@ ARCH=i386
 CHROOT=""
 VMVIEW_PATH="/usr/lib/vmware/"
 TFTPDIR="/var/lib/tftpboot"
-SETUP_ARGS_FILE="vhc-setup-args.conf"
+SETUP_ARGS_FILE="vhc-setup-args-new.conf"
 
 CLIENT_BUNDLE=`ls VMware-Horizon-Client*.bundle 2> /dev/null`
 
