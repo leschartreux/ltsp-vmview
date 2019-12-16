@@ -6,7 +6,7 @@
 
 
 DIR=$1
-ARCH=i386
+ARCH=amd64
 CHROOT=""
 VMVIEW_PATH="/usr/lib/vmware/"
 TFTPDIR="/var/lib/tftpboot"
